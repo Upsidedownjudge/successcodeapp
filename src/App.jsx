@@ -107,27 +107,15 @@ function setupPWA() {
   }
   link.href = murl;
 
-  // Try to register a service worker for offline (best-effort)
+  // NOTE: to avoid stale cached assets on deploy, unregister any existing service workers for this origin
+  // and do not register a new one here. This ensures users (and you) get the latest files immediately.
   if ('serviceWorker' in navigator) {
-    const registerInline = () => {
-      try {
-        const swCode = `const CACHE='sclean-v1';
-self.addEventListener('install', e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./'])));self.skipWaiting();});
-self.addEventListener('activate', e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
-self.addEventListener('fetch', e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.origin!==location.origin) return; e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(resp=>{const copy=resp.clone();caches.open(CACHE).then(c=>c.put(e.request, copy));return resp;}).catch(()=>caches.match('./'))));});`;
-        const url = URL.createObjectURL(new Blob([swCode], { type: 'text/javascript' }));
-        return navigator.serviceWorker.register(url, { scope: './' });
-      } catch (e) {
-        console.warn('Inline SW failed', e);
-        return Promise.resolve();
-      }
-    };
-
-    // Prefer /sw.js if available; otherwise try inline registration
-    fetch('./sw.js', { method: 'HEAD' })
-      .then(r => { if (r.ok) return navigator.serviceWorker.register('./sw.js'); throw new Error('no sw.js'); })
-      .catch(registerInline)
-      .catch(err => console.warn('Service worker registration failed', err));
+    navigator.serviceWorker
+      .getRegistrations()
+      .then((regs) => Promise.all(regs.map((r) => r.unregister())))
+      .then(() => console.info('Service workers unregistered for this origin'))
+      .catch((err) => console.warn('Failed to unregister service workers', err));
+    return;
   }
 }
 
@@ -296,7 +284,10 @@ export default function App() {
     <div className="dark min-h-screen bg-gray-950 text-gray-100">
       <header className="sticky top-0 z-10 backdrop-blur bg-gray-900/80 border-b border-gray-800">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
-          <span className="font-bold text-xl site-title">Success Code · Lean</span>
+          <div className="flex items-center gap-3">
+            <span className="font-bold text-xl site-title">Success Code · Lean</span>
+            <span className="text-xs px-2 py-1 rounded-md" style={{ background: '#ffd166', color: '#0b0f19', fontWeight: 700 }}>NEW UI</span>
+          </div>
           <nav className="flex gap-2 ml-2">
             {[
               ["checkins", "Check‑ins"],
