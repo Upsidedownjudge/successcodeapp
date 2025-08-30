@@ -693,8 +693,7 @@ function BeliefAudio({ data, setData }) {
     <section className="space-y-3">
       <h2 className="text-lg font-semibold">Belief Audio (personal recordings)</h2>
       <p className="text-sm text-gray-400">
-        Saved locally (IndexedDB). Survives refresh. No cloud upload. Max 30s per
-        clip.
+        Saved locally (IndexedDB). Survives refresh. No cloud upload.
       </p>
       <textarea
         className="border border-gray-800 rounded-xl px-3 py-2 bg-gray-900 text-white w-full min-h-[120px]"
