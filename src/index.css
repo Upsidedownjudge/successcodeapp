@@ -4,8 +4,13 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.92);
-  background-color: #0b0f19;
+  --bg: #071228;
+  --bg-2: #0b1830;
+  --accent: #7c5cff;
+  --accent-2: #ffd166;
+  --muted: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.96);
+  background-color: var(--bg);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -26,9 +31,15 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: radial-gradient(1200px 600px at 10% 10%, rgba(100,108,255,0.06), transparent), linear-gradient(180deg, #071019 0%, #07131a 60%);
+  background: radial-gradient(800px 400px at 12% 12%, rgba(124,92,255,0.08), transparent), linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
   -webkit-font-smoothing: antialiased;
 }
+
+/* App grid */
+.app-root { display: grid; grid-template-columns: 88px 1fr 360px; gap: 24px; max-width: 1200px; margin: 28px auto; padding: 20px; }
+.sidebar { display:flex; flex-direction:column; gap:12px; align-items:center; }
+.main-col { min-height: calc(100vh - 160px); }
+.right-col { min-height: calc(100vh - 160px); }
 
 h1 {
   font-size: 3.2em;
@@ -37,17 +48,18 @@ h1 {
 
 button {
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.04);
-  padding: 0.55em 1rem;
-  font-size: 0.95rem;
-  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 0.6em 1rem;
+  font-size: 1rem;
+  font-weight: 700;
   font-family: inherit;
-  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  background: linear-gradient(180deg, rgba(124,92,255,0.12), rgba(124,92,255,0.08));
+  color: white;
   cursor: pointer;
-  transition: transform 140ms ease, box-shadow 140ms ease;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.6);
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 120ms;
+  box-shadow: 0 8px 30px rgba(11,17,30,0.6);
 }
-button:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15,18,40,0.6); }
+button:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(11,17,30,0.7); }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;

@@ -282,44 +282,65 @@ export default function App() {
 
   return (
     <div className="dark min-h-screen bg-gray-950 text-gray-100">
-      <header className="sticky top-0 z-10 backdrop-blur bg-gray-900/80 border-b border-gray-800">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
-          <div className="flex items-center gap-3">
-            <span className="font-bold text-xl site-title">Success Code · Lean</span>
-            <span className="text-xs px-2 py-1 rounded-md" style={{ background: '#ffd166', color: '#0b0f19', fontWeight: 700 }}>NEW UI</span>
+      <div className="app-root">
+        <aside className="sidebar">
+          <div className="panel" style={{ width: 72, height: 72, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <strong style={{fontSize: 18}}>SC</strong>
           </div>
-          <nav className="flex gap-2 ml-2">
-            {[
-              ["checkins", "Check‑ins"],
-              ["audio", "Belief Audio"],
-            ].map(([id, label]) => (
-              <Btn
-                key={id}
-                ghost={tab !== id}
-                onClick={() => setTab(id)}
-                className="rounded-full btn-ghost"
-              >
-                {label}
-              </Btn>
-            ))}
-          </nav>
-          <div className="ml-auto" />
-        </div>
-      </header>
+          <div className="icon-btn panel" title="Check-ins" onClick={() => setTab('checkins')}>✓</div>
+          <div className="icon-btn panel" title="Belief Audio" onClick={() => setTab('audio')}>🎙</div>
+        </aside>
 
-    <main className="max-w-3xl mx-auto px-4 py-6">
-        {tab === "checkins" ? (
-      <Checkins data={data} setData={setData} />
-        ) : (
-          <BeliefAudio data={data} setData={setData} />
-        )}
-      </main>
+        <main className="main-col">
+          <div className="hero">
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span className="site-title">Success Code · Lean</span>
+                <span className="text-xs px-2 py-1 rounded-md" style={{ background: 'var(--accent-2)', color: '#071228', fontWeight: 800 }}>NEW UI</span>
+              </div>
+              <div className="muted">Simple daily check-ins and personal belief audio</div>
+            </div>
+            <div>
+              <Btn onClick={() => setTab('checkins')}>Open Check‑ins</Btn>
+            </div>
+          </div>
 
-      <footer className="max-w-3xl mx-auto px-4 pb-8 text-xs text-gray-500">
-        For crisis support in the U.S., dial 988.
-      </footer>
+          <div className="card-grid">
+            <section className="panel">
+              {tab === 'checkins' ? <Checkins data={data} setData={setData} /> : <div className="muted">Switch to Check-ins to view this panel</div>}
+            </section>
+            <section className="panel">
+              {tab === 'audio' ? <BeliefAudio data={data} setData={setData} /> : <div className="muted">Switch to Belief Audio to view this panel</div>}
+            </section>
+          </div>
+        </main>
+
+        <aside className="right-col">
+          <div className="panel">
+            <div style={{ fontWeight: 700, marginBottom: 8 }}>Today</div>
+            <div className="muted">{todayYMD()}</div>
+            <hr style={{ margin: '12px 0', borderColor: 'rgba(255,255,255,0.04)' }} />
+            <div className="muted">Quick actions</div>
+            <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+              <Btn ghost onClick={() => { download('checkins_today.json', JSON.stringify(data.logs[todayYMD()]||[], null, 2)) }}>Export</Btn>
+              <Btn ghost onClick={() => exportICSManual(data)}>ICS</Btn>
+            </div>
+          </div>
+        </aside>
+      </div>
     </div>
   );
+}
+
+// small helper for right-col ICS button
+function exportICSManual(data) {
+  const events = (data.schedule.times || []).map((t) => {
+    const [h, m] = t.split(":");
+    const start = new Date();
+    start.setHours(+h || 0, +m || 0, 0, 0);
+    return { dtstart: start, rrule: 'FREQ=DAILY', summary: 'Feeling check-in' };
+  });
+  download('checkins_daily.ics', generateICS(events));
 }
 
 // --- sections
