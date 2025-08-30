@@ -297,7 +297,6 @@ export default function App() {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <span className="site-title">Success Code · Lean</span>
-                <span className="text-xs px-2 py-1 rounded-md" style={{ background: 'var(--accent-2)', color: '#071228', fontWeight: 800 }}>NEW UI</span>
               </div>
               <div className="muted">Simple daily check-ins and personal belief audio</div>
             </div>
