@@ -296,7 +296,7 @@ export default function App() {
     <div className="dark min-h-screen bg-gray-950 text-gray-100">
       <header className="sticky top-0 z-10 backdrop-blur bg-gray-900/80 border-b border-gray-800">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
-          <span className="font-bold text-xl">Success Code · Lean</span>
+          <span className="font-bold text-xl site-title">Success Code · Lean</span>
           <nav className="flex gap-2 ml-2">
             {[
               ["checkins", "Check‑ins"],
@@ -306,7 +306,7 @@ export default function App() {
                 key={id}
                 ghost={tab !== id}
                 onClick={() => setTab(id)}
-                className="rounded-full"
+                className="rounded-full btn-ghost"
               >
                 {label}
               </Btn>
@@ -316,9 +316,9 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 py-6">
+    <main className="max-w-3xl mx-auto px-4 py-6">
         {tab === "checkins" ? (
-          <Checkins data={data} setData={setData} />
+      <Checkins data={data} setData={setData} />
         ) : (
           <BeliefAudio data={data} setData={setData} />
         )}
