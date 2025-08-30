@@ -257,7 +257,6 @@ export default function App() {
     "successcode:lean+audio",
     defaultData
   );
-  const [tests, setTests] = useState("");
   const [tab, setTab] = useState("checkins"); // simple 2-tab: checkins / audio
 
   // ensure today exists + run tests
@@ -274,8 +273,7 @@ export default function App() {
         }));
       return next;
     });
-    const res = runTests();
-    setTests(res.text);
+  // tests removed for production; keep runTests available for local debugging if needed
   }, [setData]);
 
   // midnight rollover
@@ -314,7 +312,7 @@ export default function App() {
               </Btn>
             ))}
           </nav>
-          <div className="ml-auto text-xs text-gray-400">{tests}</div>
+          <div className="ml-auto" />
         </div>
       </header>
 
