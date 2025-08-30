@@ -1,42 +1,17 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+/* Page container */
+#root { max-width: 920px; margin: 0 auto; padding: 2rem; }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
+/* Header */
+.site-title { font-weight: 700; letter-spacing: -0.02em; }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+/* Card / panels */
+.rounded-xl { border-radius: 14px; }
+.panel { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding: 1.1rem; border: 1px solid rgba(255,255,255,0.04); box-shadow: 0 8px 30px rgba(2,6,23,0.6); }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
+/* Inputs */
+input[type="time"], input[type="text"], textarea { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); padding: 0.6rem 0.8rem; border-radius: 10px; color: inherit; }
 
-.card {
-  padding: 2em;
-}
+/* Small helpers */
+.muted { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
 
-.read-the-docs {
-  color: #888;
-}
+.btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.04); }
