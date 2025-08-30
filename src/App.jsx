@@ -21,7 +21,8 @@ const Input = ({ className = "", ...p }) => (
 );
 
 // --- utils
-const MAX_REC_MS = 30_000; // 30s cap for all recordings
+// Recording length cap: 0 disables the automatic timeout (allowing manual stop / unlimited length)
+const MAX_REC_MS = 0; // set >0 to re-enable an automatic stop (ms)
 const todayYMD = () => new Date().toISOString().slice(0, 10);
 const clone = (x) => {
   try {
@@ -501,11 +502,13 @@ function VoiceCell({ row, onChange }) {
         stream.getTracks().forEach((t) => t.stop());
       };
       rec.start();
-      recRef.current.timer = setTimeout(() => {
-        try {
-          rec.stop();
-        } catch {}
-      }, MAX_REC_MS);
+      if (MAX_REC_MS > 0) {
+        recRef.current.timer = setTimeout(() => {
+          try {
+            rec.stop();
+          } catch {}
+        }, MAX_REC_MS);
+      }
       setStatus("rec");
     } catch (e) {
       console.error(e);
@@ -613,11 +616,13 @@ function BeliefAudio({ data, setData }) {
       };
       rec.start();
       setRecState("rec");
-      recRef.current.timer = setTimeout(() => {
-        try {
-          rec.stop();
-        } catch {}
-      }, MAX_REC_MS);
+      if (MAX_REC_MS > 0) {
+        recRef.current.timer = setTimeout(() => {
+          try {
+            rec.stop();
+          } catch {}
+        }, MAX_REC_MS);
+      }
     } catch (e) {
       console.error(e);
       setRecState("error");
