@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 
 // --- tiny UI
 const Btn = ({ ghost, danger, className = "", ...p }) => (
@@ -151,6 +151,7 @@ const defaultData = {
 };
 
 // --- self-tests (lightweight + extra coverage)
+// Available in development for debugging
 function runTests() {
   const out = [];
   const d = new Date(2000, 0, 2, 3, 4, 5);
@@ -182,6 +183,11 @@ function runTests() {
     ok: out.every(([, p]) => p),
     text: out.map(([n, p]) => `${p ? "✔" : "✖"} ${n}`).join(" · "),
   };
+}
+
+// Make runTests available globally in development
+if (import.meta.env.DEV) {
+  window.runTests = runTests;
 }
 
 // --- media recorder helper + IndexedDB persistence
@@ -505,7 +511,9 @@ function VoiceCell({ row, onChange }) {
         recRef.current.timer = setTimeout(() => {
           try {
             rec.stop();
-          } catch {}
+          } catch {
+            // Ignore errors if recorder already stopped
+          }
         }, MAX_REC_MS);
       }
       setStatus("rec");
@@ -520,7 +528,7 @@ function VoiceCell({ row, onChange }) {
       if (recRef.current?.timer) clearTimeout(recRef.current.timer);
       recRef.current?.rec?.stop();
       setStatus("done");
-    } catch (e) {
+    } catch {
       setStatus("error");
     }
   };
@@ -562,7 +570,7 @@ function BeliefAudio({ data, setData }) {
   const [recState, setRecState] = useState("idle");
   const [url, setUrl] = useState("");
   const recRef = useRef(null);
-  const list = data.beliefAudioList || [];
+  const list = useMemo(() => data.beliefAudioList || [], [data.beliefAudioList]);
 
   // migrate old single id -> list once
   useEffect(() => {
@@ -619,7 +627,9 @@ function BeliefAudio({ data, setData }) {
         recRef.current.timer = setTimeout(() => {
           try {
             rec.stop();
-          } catch {}
+          } catch {
+            // Ignore errors if recorder already stopped
+          }
         }, MAX_REC_MS);
       }
     } catch (e) {
